@@ -21,7 +21,6 @@ class App extends Component {
 
     console.log("Dragged from", source, "to", destination);
     
-    // 您可以在此处添加状态更新逻辑，将项目从 source 列移动到 destination 列
   };
 
   renderShippingRequests() {

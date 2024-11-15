@@ -1,3 +1,23 @@
 .Board {
   margin-top: 12px;
 }
+
+.Card {
+  padding: 8px;
+  margin: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #000;
+}
+
+.Card.backlog {
+  background-color: #d3d3d3; /* 浅灰色 */
+}
+
+.Card.in-progress {
+  background-color: #add8e6; /* 浅蓝色 */
+}
+
+.Card.complete {
+  background-color: #90ee90; /* 浅绿色 */
+}

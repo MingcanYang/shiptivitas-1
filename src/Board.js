@@ -80,10 +80,8 @@ export default class Board extends React.Component {
   }
 
   updateClientStatus(clientId, newStatus) {
-    // 获取当前 clients 状态并更新拖放项目的状态
     const updatedClients = { ...this.state.clients };
-
-    // 移除项目
+  
     let client;
     Object.keys(updatedClients).forEach(status => {
       const index = updatedClients[status].findIndex(c => c.id === clientId);
@@ -91,12 +89,13 @@ export default class Board extends React.Component {
         client = updatedClients[status].splice(index, 1)[0];
       }
     });
-
-    // 更新状态并添加到目标泳道
+  
     if (client) {
       client.status = newStatus;
       updatedClients[newStatus].push(client);
-      this.setState({ clients: updatedClients });
+      this.setState({ clients: updatedClients }, () => {
+        console.log("State updated:", this.state.clients);
+      });
     }
   }
 
