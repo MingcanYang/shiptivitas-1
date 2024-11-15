@@ -3,6 +3,7 @@ import './Card.css';
 
 export default class Card extends React.Component {
   render() {
+    console.log("Card status:", this.props.status); // 检查 status 值是否正确
     let className = ['Card'];
     if (this.props.status === 'backlog') {
       className.push('Card-grey');

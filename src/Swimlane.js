@@ -7,7 +7,7 @@ export default class Swimlane extends React.Component {
     const cards = this.props.clients.map(client => {
       return (
         <Card
-          key={client.id}
+          key={client.id + client.status}
           id={client.id}
           name={client.name}
           description={client.description}
