@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import 'bootstrap/dist/css/bootstrap.css';
 import HomeTab from './HomeTab';
 import Navigation from './Navigation';
@@ -12,8 +13,22 @@ class App extends Component {
       selectedTab: 'home',
     };
   }
+  
+  onDragEnd = (result) => {
+    const { source, destination } = result;
+
+    if (!destination) return;
+
+    console.log("Dragged from", source, "to", destination);
+    
+  };
+
   renderShippingRequests() {
-    return (<Board />);
+    return (
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <Board />
+      </DragDropContext>
+    );
   }
 
   renderNavigation() {
