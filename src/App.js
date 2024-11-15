@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 import 'bootstrap/dist/css/bootstrap.css';
 import HomeTab from './HomeTab';
 import Navigation from './Navigation';
@@ -21,6 +21,7 @@ class App extends Component {
 
     console.log("Dragged from", source, "to", destination);
     
+    // 您可以在此处添加状态更新逻辑，将项目从 source 列移动到 destination 列
   };
 
   renderShippingRequests() {
@@ -42,11 +43,12 @@ class App extends Component {
     switch(this.state.selectedTab) {
       case 'home':
       default:
-        return HomeTab();
+        return <HomeTab />;
       case 'shipping-requests':
         return this.renderShippingRequests();
     }
   }
+
   render() {
     return (
       <div className="App">

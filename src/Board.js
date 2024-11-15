@@ -14,13 +14,41 @@ export default class Board extends React.Component {
         inProgress: clients.filter(client => client.status && client.status === 'in-progress'),
         complete: clients.filter(client => client.status && client.status === 'complete'),
       }
-    }
+    };
     this.swimlanes = {
       backlog: React.createRef(),
       inProgress: React.createRef(),
       complete: React.createRef(),
-    }
+    };
   }
+
+  componentDidMount() {
+    // 初始化 Dragula，将泳道绑定到拖放区域
+    this.drake = Dragula([
+      this.swimlanes.backlog.current,
+      this.swimlanes.inProgress.current,
+      this.swimlanes.complete.current
+    ]);
+
+    // 添加 drop 事件，用于在项目被放下时更新状态
+    this.drake.on('drop', (el, target, source) => {
+      const clientId = el.getAttribute('data-id');
+      const sourceStatus = source.getAttribute('data-status');
+      const targetStatus = target.getAttribute('data-status');
+      
+      // 如果拖放到相同泳道则不更新
+      if (sourceStatus === targetStatus) return;
+
+      // 更新项目状态
+      this.updateClientStatus(clientId, targetStatus);
+    });
+  }
+
+  componentWillUnmount() {
+    // 销毁 Dragula 实例以防止内存泄漏
+    this.drake.destroy();
+  }
+
   getClients() {
     return [
       ['1','Stark, White and Abbott','Cloned Optimal Architecture', 'in-progress'],
@@ -50,9 +78,31 @@ export default class Board extends React.Component {
       status: companyDetails[3],
     }));
   }
+
+  updateClientStatus(clientId, newStatus) {
+    // 获取当前 clients 状态并更新拖放项目的状态
+    const updatedClients = { ...this.state.clients };
+
+    // 移除项目
+    let client;
+    Object.keys(updatedClients).forEach(status => {
+      const index = updatedClients[status].findIndex(c => c.id === clientId);
+      if (index > -1) {
+        client = updatedClients[status].splice(index, 1)[0];
+      }
+    });
+
+    // 更新状态并添加到目标泳道
+    if (client) {
+      client.status = newStatus;
+      updatedClients[newStatus].push(client);
+      this.setState({ clients: updatedClients });
+    }
+  }
+
   renderSwimlane(name, clients, ref) {
     return (
-      <Swimlane name={name} clients={clients} dragulaRef={ref}/>
+      <Swimlane name={name} clients={clients} dragulaRef={ref} />
     );
   }
 
